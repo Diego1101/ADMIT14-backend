@@ -11,6 +11,7 @@ vehicleList = table();
 
 %% Environment variables
 tlThreshold = 10;
+vehicleThreshold = 10;
 delayTime = 1;
 
 %% MQTT connection and subscriptions
@@ -58,4 +59,5 @@ while 1
 
     %% LogicFunctions
     trafficLightLogic(trafficLightList, vehicleList, tlThreshold, mqClient);
+    collisionLogic(vehicleList, vehicleThreshold, mqClient);
 end
