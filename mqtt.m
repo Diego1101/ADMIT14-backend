@@ -45,6 +45,7 @@ while 1
     %% Read data in mqtt buffer, add elseif for each topic to handle
     mqttData = read(mqClient);
     if ~isempty(mqttData)
+        %Only for testing and data view
         mqttData
         for i=1: size(mqttData, 1)
             if startsWith(mqttData.Topic(i), trafficLightTopic)
@@ -52,6 +53,8 @@ while 1
             elseif startsWith(mqttData.Topic(i), vehicleTopic)
                 vehicleList = vehicleRead(mqttData(i,:).Data, vehicleList);
             elseif startsWith(mqttData.Topic(1), "other topic")
+                % Add here function to handle other topics like weather and
+                % parking
                 %call other function
             end
         end
@@ -61,4 +64,8 @@ while 1
     %% LogicFunctions
     trafficLightLogic(trafficLightList, vehicleList, tlThreshold, mqClient);
     collisionLogic(vehicleList, vehicleThreshold, mqClient);
+    % Add here function to handle async logic
+
+    % Add here code to draw a pretty map
+    % drawABeautifulMapUiNoErrorsWorking100Free()
 end
