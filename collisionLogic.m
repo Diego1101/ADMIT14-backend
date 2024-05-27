@@ -1,4 +1,8 @@
 function collisionLogic(vehicleList, vehicleThreshold, mqClient)
+    
+    if isempty(vehicleList)
+        return
+    end
     vehicleCords = cat(2, vehicleList.Position{:});
     
     % Calculate distances
@@ -14,11 +18,11 @@ function collisionLogic(vehicleList, vehicleThreshold, mqClient)
 
     % Get ids where distance is less that threshold
     [firstVehicle, secondVehicle] = find(distances < vehicleThreshold & distances ~= 0);
-    result = [firstVehicle, secondVehicle]
+    result = [firstVehicle, secondVehicle];
 
     %Send mqtt messages
-    %for i=1: size(result, 1)
-    for i=1: 1
+    for i=1: size(result, 1)
+    %for i=1: 1
 
         diff = vehicleCords(:,result(i,1)) - vehicleCords(:,result(i,2));
         direction = atan2(diff(1), diff(2));

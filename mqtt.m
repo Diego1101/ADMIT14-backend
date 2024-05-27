@@ -1,5 +1,5 @@
 %% Constants
-brokerAddress = "mqtt://192.168.0.104";
+brokerAddress = "mqtt://raspberrypi.local";
 port = 1883;
 clientID = "matlab";
 %userName = "Your Username";
@@ -23,7 +23,7 @@ mqClient = mqttclient(brokerAddress, Port = port, ClientID = clientID);
 trafficLightTopic = "trafficLight/info";
 vehicleTopic = "vehicle/info";
 subscribe(mqClient, trafficLightTopic+"/+");
-subscribe(mqClient, vehicleTopic+"/+");
+subscribe(mqClient, vehicleTopic);
 
 %% Create button to stop execution
 ButtonHandle = uicontrol('Style', 'PushButton', ...
@@ -45,6 +45,7 @@ while 1
     %% Read data in mqtt buffer, add elseif for each topic to handle
     mqttData = read(mqClient);
     if ~isempty(mqttData)
+        mqttData
         for i=1: size(mqttData, 1)
             if startsWith(mqttData.Topic(i), trafficLightTopic)
                 trafficLightList = trafficLightRead(mqttData(i,:).Data, trafficLightList);
