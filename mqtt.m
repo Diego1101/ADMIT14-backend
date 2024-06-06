@@ -1,15 +1,17 @@
+global status;
+status = 1;
+
 %% Constants
-brokerAddress = "mqtt://raspberrypi.local";
+brokerAddress = "mqtt://broker.hivemq.com";
 port = 1883;
-clientID = "matlab";
-%userName = "Your Username";
-%password = "Your Password";
+clientID = "matlab2";
 
 % UNCOMMENT
 trafficLightList = table();
 vehicleList = table();
 
 %% Environment variables
+global status;
 tlThreshold = 10;
 vehicleThreshold = 10;
 delayTime = 1;
@@ -26,22 +28,24 @@ subscribe(mqClient, trafficLightTopic+"/+");
 subscribe(mqClient, vehicleTopic);
 
 %% Create button to stop execution
-ButtonHandle = uicontrol('Style', 'PushButton', ...
-                         'String', 'Stop back-end', ...
-                         'Callback', 'delete(gcbf)');
-ButtonHandle.Position = [100 200 300 40];
+fig = uifigure;
+p = uipanel(fig, "Title", "ADMIT14-BackEnd", "Position", [5 5 550 410]);
+btnStop = uibutton(p, "Text", "Stop", "ButtonPushedFcn", @btnStop_Callback, ...
+    "Position", [200, 15 100 25]);
 
 %% Main program loop, Interrupt and clear memory
 while 1
     pause(delayTime);
-    if ~ishandle(ButtonHandle)
+    drawnow
+    if status == 0
         % Stop the if cancel button was pressed
         clear mqClient
         %clear
         disp('Back-end stopped');
+        close(fig);
         break;
     end
-
+    
     %% Read data in mqtt buffer, add elseif for each topic to handle
     mqttData = read(mqClient);
     if ~isempty(mqttData)
