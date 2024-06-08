@@ -30,22 +30,30 @@ subscribe(mqClient, vehicleTopic);
 subscribe(mqClient, weatherTopic);
 subscribe(mqClient, parkingTopic);
 
-%% Create button to stop execution
+%% Create UI: close button, map & buildings
+% Generate parking buildings
+[building_names,building_coordinates,vacantParking] = generateBuildings();
+
+
 fig = uifigure;
 p = uipanel(fig, "Title", "ADMIT14-BackEnd", "Position", [5 5 550 410]);
 btnStop = uibutton(p, "Text", "Stop", "ButtonPushedFcn", @btnStop_Callback, ...
     "Position", [200, 15 100 25]);
-ax = axes(p);
-hold(ax,'on')
-drawMap(ax);
 
-% Find Closest Parking Building with Destination and Available Parking Spaces
-[building_names,building_coordinates,vacantParking] = generateBuildings();
+baseAx = axes(p);
+hold(baseAx,'on');
+
+dynamicAx = axes(p, "Color", "none");
+hold(dynamicAx,'on');
+xlim(dynamicAx, [0 90]);
+ylim(dynamicAx, [0 120]);
+
+drawMap(baseAx, building_coordinates);
 
 %% Main program loop, Interrupt and clear memory
 while 1
-    pause(delayTime);
     drawnow
+    pause(delayTime);
     if status == 0
         % Stop the if cancel button was pressed
         clear mqClient
@@ -61,6 +69,7 @@ while 1
         %Only for testing and data view
         mqttData
         for i=1: size(mqttData, 1)
+            % Function for data reading and SYNC logic
             if startsWith(mqttData.Topic(i), trafficLightTopic)
                 trafficLightList = trafficLightRead(mqttData(i,:).Data, trafficLightList);
             elseif startsWith(mqttData.Topic(i), vehicleTopic)
@@ -73,11 +82,10 @@ while 1
         end
     end
 
-    %% LogicFunctions
+    %% ASYNC LogicFunctions
     trafficLightLogic(trafficLightList, vehicleList, tlThreshold, mqClient);
     collisionLogic(vehicleList, vehicleThreshold, mqClient);
-    % Add here function to handle async logic
 
     % Add here code to draw a pretty map
-    %updateUI()
+    updateUIElemetns(dynamicAx, vehicleList, trafficLightList);
 end

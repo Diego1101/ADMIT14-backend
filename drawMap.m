@@ -1,4 +1,4 @@
-function drawMap(ax)
+function drawMap(ax, buildingCoordinates)
 % This function draws the ma
 
 % Define map size
@@ -19,5 +19,8 @@ rectangle(ax, 'Position', [road_width, 2 * road_width + (map_height - 3 * road_w
 rectangle(ax, 'Position', [2 * road_width + (map_width - 3 * road_width) / 2 , 2 * road_width + (map_height - 3 * road_width) / 2 , (map_width - 3 * road_width) / 2, (map_height - 3 * road_width) / 2], 'LineWidth', 2); % right upper square
 rectangle(ax, 'Position', [2 * road_width + (map_width - 3 * road_width) / 2 , road_width, (map_width - 3 * road_width) / 2, (map_height - 3 * road_width) / 2], 'LineWidth', 2); % right bottom square
 
+% Plot parking building
+rectangle(ax, 'Position', [buildingCoordinates(1,:)-3, 6, 6], 'LineWidth', 2,'EdgeColor','r'); % left bottom building (A)
+rectangle(ax, 'Position', [buildingCoordinates(2,:)-3, 6, 6], 'LineWidth', 2, 'EdgeColor','b'); % right upper square (B)
 
 end
