@@ -6,7 +6,6 @@ brokerAddress = "mqtt://broker.hivemq.com";
 port = 1883;
 clientID = "matlab2";
 
-% UNCOMMENT
 trafficLightList = table();
 vehicleList = table();
 
@@ -32,6 +31,9 @@ fig = uifigure;
 p = uipanel(fig, "Title", "ADMIT14-BackEnd", "Position", [5 5 550 410]);
 btnStop = uibutton(p, "Text", "Stop", "ButtonPushedFcn", @btnStop_Callback, ...
     "Position", [200, 15 100 25]);
+ax = axes(p);
+hold(ax,'on')
+drawMap(ax);
 
 %% Main program loop, Interrupt and clear memory
 while 1
@@ -71,5 +73,5 @@ while 1
     % Add here function to handle async logic
 
     % Add here code to draw a pretty map
-    % drawABeautifulMapUiNoErrorsWorking100Free()
+    %updateUI()
 end
