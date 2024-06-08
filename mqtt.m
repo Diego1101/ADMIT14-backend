@@ -23,8 +23,12 @@ mqClient = mqttclient(brokerAddress, Port = port, ClientID = clientID);
 
 trafficLightTopic = "trafficLight/info";
 vehicleTopic = "vehicle/info";
+weatherTopic = "weather/info";
+parkingTopic = "parking/info";
 subscribe(mqClient, trafficLightTopic+"/+");
 subscribe(mqClient, vehicleTopic);
+subscribe(mqClient, weatherTopic);
+subscribe(mqClient, parkingTopic);
 
 %% Create button to stop execution
 fig = uifigure;
@@ -34,6 +38,9 @@ btnStop = uibutton(p, "Text", "Stop", "ButtonPushedFcn", @btnStop_Callback, ...
 ax = axes(p);
 hold(ax,'on')
 drawMap(ax);
+
+% Find Closest Parking Building with Destination and Available Parking Spaces
+[building_names,building_coordinates,vacantParking] = generateBuildings();
 
 %% Main program loop, Interrupt and clear memory
 while 1
@@ -58,13 +65,12 @@ while 1
                 trafficLightList = trafficLightRead(mqttData(i,:).Data, trafficLightList);
             elseif startsWith(mqttData.Topic(i), vehicleTopic)
                 vehicleList = vehicleRead(mqttData(i,:).Data, vehicleList);
-            elseif startsWith(mqttData.Topic(1), "other topic")
-                % Add here function to handle other topics like weather and
-                % parking
-                %call other function
+            elseif startsWith(mqttData.Topic(i), weatherTopic)
+                weatherRead(mqttData(i,:).Data,mqClient);
+            elseif startsWith(mqttData.Topic(i), parkingTopic)    
+                parkingLogic(mqttData(i,:).Data,mqClient, building_coordinates,building_names, vacantParking);
             end
         end
-
     end
 
     %% LogicFunctions
