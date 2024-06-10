@@ -38,7 +38,7 @@ subscribe(mqClient, parkingTopic);
 fig = uifigure;
 p = uipanel(fig, "Title", "ADMIT14-BackEnd", "Position", [5 5 550 410]);
 btnStop = uibutton(p, "Text", "Stop", "ButtonPushedFcn", @btnStop_Callback, ...
-    "Position", [200, 15 100 25]);
+    "Position", [200, 360 100 25]);
 
 baseAx = axes(p);
 hold(baseAx,'on');
@@ -55,11 +55,12 @@ while 1
     drawnow
     pause(delayTime);
     if status == 0
+        save("lastRun", "trafficLightList", "vehicleList");
         % Stop the if cancel button was pressed
-        clear mqClient
         %clear
         disp('Back-end stopped');
         close(fig);
+        clear
         break;
     end
     

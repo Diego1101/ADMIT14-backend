@@ -25,7 +25,10 @@ if ~isempty(vehicleList) & ~isempty(traficLigtList)
         [~, b] = unique(result(:,2));
         filteredResult = result(b, :);
     end
-    
+
+    if isempty(filteredResult)
+        return
+    end
     %Send mqtt messages
     for i=1: size(filteredResult, 1)
         mqttMessage = table2struct(traficLigtList(filteredResult(i, 1), :));
