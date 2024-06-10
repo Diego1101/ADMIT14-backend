@@ -4,7 +4,7 @@ function vehicleList = vehicleRead(jsonSring,vehicleList)
 %Decode from ascci
 ascciArray = str2double(split(jsonSring));
 ascciArray = ascciArray(find(ascciArray~=0));
-ascciArray = ascciArray(1:end-1);
+%ascciArray = ascciArray(1:end-1)
 
 jsonSring = convertCharsToStrings(char(ascciArray));
 

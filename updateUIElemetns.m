@@ -1,7 +1,7 @@
 function updateUIElemetns(ax, vehicleList, trafficLightList)
 %Update traffic lights and vehicle positions
 
-if isempty(vehicleList)
+if isempty(vehicleList) || isempty(trafficLightList)
     return
 end
 

@@ -13,7 +13,7 @@ vehicleList = table();
 global status;
 tlThreshold = 10;
 vehicleThreshold = 10;
-delayTime = 1;
+delayTime = 0.2;
 
 %% MQTT connection and subscriptions
 % mqClient = mqttclient(brokerAddress, Port = port, ClientID = clientID, ...
