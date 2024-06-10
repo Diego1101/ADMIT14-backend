@@ -20,8 +20,11 @@ if ~isempty(vehicleList) & ~isempty(traficLigtList)
 
     % Filter repeated vehicles, only closest traffic light to vehicle
     result = [traficLightIds, vehicleIds];
-    [~, b] = unique(result(:,2));
-    filteredResult = result(b, :);
+    filteredResult = result;
+    if ~isempty(result)
+        [~, b] = unique(result(:,2));
+        filteredResult = result(b, :);
+    end
     
     %Send mqtt messages
     for i=1: size(filteredResult, 1)

@@ -1,6 +1,10 @@
 function updateUIElemetns(ax, vehicleList, trafficLightList)
 %Update traffic lights and vehicle positions
 
+if isempty(vehicleList)
+    return
+end
+
 vehicleCoords = cat(2, vehicleList.Position{:});
 
 delete( findobj(ax, 'type', 'Line') )
