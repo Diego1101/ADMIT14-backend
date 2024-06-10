@@ -4,8 +4,17 @@ function [building_names,building_coordinates,vacantParking] = generateBuildings
 x_buildA = generate_xBuilding();
 y_buildA = generate_yBuilding(x_buildA);
 
-x_buildB = generate_xBuilding();
-y_buildB = generate_yBuilding(x_buildB);
+overlap = 1;
+while (overlap == 1)
+    x_buildB = generate_xBuilding();
+    y_buildB = generate_yBuilding(x_buildB);
+    build_dist = sqrt((x_buildA - x_buildB).^2 + (y_buildA-y_buildB).^2);
+    if (build_dist <= 6)
+        overlap = 1;
+    else
+        overlap = 0;
+    end
+end    
 
 building_names = {'Building A', 'Building B'};
 building_coordinates = [x_buildA, y_buildA; x_buildB, y_buildB];
